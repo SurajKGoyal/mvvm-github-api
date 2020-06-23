@@ -5,12 +5,14 @@ import com.surajkgoyal.ltgithub.db.dao.IssuesDao
 import com.surajkgoyal.ltgithub.db.model.Issues
 import com.surajkgoyal.ltgithub.utils.State
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@ExperimentalCoroutinesApi
 @Singleton
 class IssuesRepository @Inject constructor(
     val issuesDao: IssuesDao,

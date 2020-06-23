@@ -34,7 +34,7 @@ class RepoViewModel @ViewModelInject constructor(private val repository: ReposRe
 
     fun addUserToRepo(user: String){
         viewModelScope.launch {
-            repository
+
         }
     }
 }

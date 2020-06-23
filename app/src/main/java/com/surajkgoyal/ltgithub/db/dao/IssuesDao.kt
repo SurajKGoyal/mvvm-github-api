@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface IssuesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertIssues(posts: List<Issues>)
+    fun insertIssues(issues: List<Issues>)
 
     @Query("UPDATE Issues SET repository=:repo WHERE id=:id")
     fun addRepoName(id: String, repo: String)

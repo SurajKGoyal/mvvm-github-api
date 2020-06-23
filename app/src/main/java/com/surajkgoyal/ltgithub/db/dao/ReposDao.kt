@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ReposDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertRepos(posts: List<Repos>)
+    fun insertRepos(repos: List<Repos>)
 
     @Query("UPDATE Repos SET owner=:user WHERE id=:id")
     fun addOwnerName(id: String, user: String)

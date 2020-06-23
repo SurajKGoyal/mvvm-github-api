@@ -37,4 +37,8 @@ class ReposRepository @Inject constructor(
 
         }.asFlow().flowOn(Dispatchers.IO)
     }
+
+    fun addUserToRepo(id: String, user:String){
+        reposDao.addOwnerName(id, user)
+    }
 }
