@@ -9,7 +9,7 @@ import com.surajkgoyal.ltgithub.db.model.Issues
 import com.surajkgoyal.ltgithub.db.model.Repos
 
 class IssueItemViewHolder(val binding: IssueItemsBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: Issues, onItemClickListener: RepoItemAdapter.OnItemClickListener? = null) {
+    fun bind(item: Issues) {
         binding.issue = item
 
     }
