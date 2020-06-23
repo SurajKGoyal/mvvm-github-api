@@ -5,6 +5,7 @@ import com.surajkgoyal.ltgithub.db.model.Repos
 import com.surajkgoyal.ltgithub.db.dao.ReposDao
 import com.surajkgoyal.ltgithub.utils.State
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import retrofit2.Response
@@ -21,6 +22,7 @@ class ReposRepository @Inject constructor(
      * Fetched the repos from network and stored it in database. At the end, data from persistence
      * storage is fetched and emitted.
      */
+    @ExperimentalCoroutinesApi
     fun getAllRepos(user: String): Flow<State<List<Repos>>> {
         return object : NetworkBoundRepository<List<Repos>, List<Repos>>() {
 
