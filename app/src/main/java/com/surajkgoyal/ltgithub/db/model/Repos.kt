@@ -11,24 +11,23 @@ data class Repos(
     var id: String = "",
 
     @SerializedName("name")
-    var name: String? = null,
+    var name: String = "",
 
-    @SerializedName("login")
-    var owner: String? = null,
+    var owner: String? = "",
 
     @SerializedName("description")
-    var description: String? = null,
+    var description: String = "",
 
     @SerializedName("language")
-    var language: String? = null,
+    var language: String? = "",
 
     @SerializedName("has_issues")
-    var hasIssues: Boolean? = null,
+    var hasIssues: Boolean? = false,
 
     @SerializedName("forks_count")
-    var forksCount: Int? = null,
+    var forksCount: Int? = 0,
 
     @SerializedName("watchers_count")
-    var watchersCount: Int? = null
+    var watchersCount: Int? = 0
 ) {
 }

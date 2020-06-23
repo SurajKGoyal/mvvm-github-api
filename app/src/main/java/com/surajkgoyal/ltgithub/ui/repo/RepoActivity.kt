@@ -66,9 +66,14 @@ class RepoActivity : AppCompatActivity(), RepoItemAdapter.OnItemClickListener {
                 }
             }
         })
+
+        if(rViewModel.reposLiveData.value !is State.Success){
+            rViewModel.getPosts(user)
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
+
     }
 
     private fun handleNetworkChanges() {
