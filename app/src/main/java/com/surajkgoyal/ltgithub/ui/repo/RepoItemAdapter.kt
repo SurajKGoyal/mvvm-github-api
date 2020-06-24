@@ -1,7 +1,6 @@
 package com.surajkgoyal.ltgithub.ui.repo
 
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.surajkgoyal.ltgithub.db.model.Repos

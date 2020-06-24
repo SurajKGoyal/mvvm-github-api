@@ -1,22 +1,36 @@
 package com.surajkgoyal.ltgithub.db.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity
+@Entity(
+    indices = [
+        Index("id"),
+        Index("owner_login")],
+    primaryKeys = ["name", "owner_login"]
+)
 data class Repos(
-    @PrimaryKey
     @SerializedName("id")
     var id: String = "",
 
-    @SerializedName("name")
+    @field:SerializedName("name")
     var name: String = "",
 
-    var owner: String? = "",
+    @field:SerializedName("full_name")
+    var fullName: String ="",
+
+    @field:SerializedName("owner")
+    @field:Embedded(prefix = "owner_")
+    val owner: Owner,
+
+    @SerializedName("url")
+    var url: String? = "",
 
     @SerializedName("description")
-    var description: String = "",
+    var description: String? = "",
 
     @SerializedName("language")
     var language: String? = "",
@@ -30,4 +44,13 @@ data class Repos(
     @SerializedName("watchers_count")
     var watchersCount: Int? = 0
 ) {
+
+    data class Owner(
+        @field:SerializedName("login")
+        val login: String,
+        @field:SerializedName("url")
+        val url: String?
+    )
+
+
 }

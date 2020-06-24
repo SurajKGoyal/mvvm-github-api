@@ -9,6 +9,7 @@ import com.surajkgoyal.ltgithub.db.model.Issues
 import com.surajkgoyal.ltgithub.db.model.Repos
 import com.surajkgoyal.ltgithub.repositories.IssuesRepository
 import com.surajkgoyal.ltgithub.repositories.ReposRepository
+import com.surajkgoyal.ltgithub.utils.Resource
 import com.surajkgoyal.ltgithub.utils.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -19,18 +20,12 @@ class IssueViewModel @ViewModelInject constructor(private val repository: Issues
     ViewModel() {
 
 
-    private val _reposLiveData = MutableLiveData<State<List<Issues>>>()
+    private val _issuesLiveData = MutableLiveData<Resource<List<Issues>>>()
 
-    val reposLiveData: LiveData<State<List<Issues>>>
-        get() = _reposLiveData
-
-    fun getIssues(user:String, repo: String) {
-        viewModelScope.launch {
-         repository.getAllIssues(user, repo).collect {
-             _reposLiveData.value = it
-         }
+    lateinit var issuesLiveData: LiveData<Resource<List<Issues>>>
 
 
-        }
+    fun getIssues(user:String, repo: String, repoUrl: String) {
+         issuesLiveData = repository.getAllIssues(user, repo, repoUrl)
     }
 }

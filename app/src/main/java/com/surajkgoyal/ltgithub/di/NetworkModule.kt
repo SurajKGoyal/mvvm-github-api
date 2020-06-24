@@ -1,5 +1,6 @@
 package com.surajkgoyal.ltgithub.di
 
+import com.android.example.github.util.LiveDataCallAdapterFactory
 import com.surajkgoyal.ltgithub.api.GithubService
 import dagger.Module
 import dagger.Provides
@@ -14,6 +15,8 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 @Module
 class NetworkModule {
+
+
     @Singleton
     @Provides
     fun provideRetrofitService(): GithubService = Retrofit.Builder()
@@ -21,6 +24,7 @@ class NetworkModule {
         .addConverterFactory(
             GsonConverterFactory.create()
         )
+        .addCallAdapterFactory(LiveDataCallAdapterFactory())
         .build()
         .create(GithubService::class.java)
 }

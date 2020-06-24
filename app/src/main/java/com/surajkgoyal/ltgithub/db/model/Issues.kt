@@ -4,15 +4,18 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity
+@Entity(
+    primaryKeys = ["id"]
+)
 data class Issues(
-    @PrimaryKey
+
     @SerializedName("id")
     var id: String = "",
 
-    var repository: String? = null,
+    @SerializedName("repository_url")
+    var repoUrl: String? = "",
 
-    @SerializedName("title")
-    var title: String? = null
+    @field:SerializedName("title")
+    var title: String? = ""
 ) {
 }

@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.surajkgoyal.ltgithub.db.model.Repos
 import com.surajkgoyal.ltgithub.repositories.ReposRepository
-import com.surajkgoyal.ltgithub.utils.State
+import com.surajkgoyal.ltgithub.utils.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -17,19 +16,14 @@ class RepoViewModel @ViewModelInject constructor(private val repository: ReposRe
     ViewModel() {
 
 
-    private val _reposLiveData = MutableLiveData<State<List<Repos>>>()
+    private val _reposLiveData = MutableLiveData<Resource<List<Repos>>>()
 
-    val reposLiveData: LiveData<State<List<Repos>>>
-        get() = _reposLiveData
+    lateinit var reposLiveData: LiveData<Resource<List<Repos>>>
 
-    fun getPosts(user:String) {
-        viewModelScope.launch {
-         repository.getAllRepos(user).collect {
-             _reposLiveData.value = it
-         }
+    fun getRepos(user:String) {
+         reposLiveData = repository.getAllRepos(user)
 
 
-        }
     }
 
     fun addUserToRepo(user: String){

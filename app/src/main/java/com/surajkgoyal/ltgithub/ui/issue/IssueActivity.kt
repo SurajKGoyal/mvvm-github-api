@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.surajkgoyal.ltgithub.R
-import com.surajkgoyal.ltgithub.ui.repo.RepoItemAdapter
 import com.surajkgoyal.ltgithub.utils.NetworkUtils
-import com.surajkgoyal.ltgithub.utils.State
 import com.surajkgoyal.ltgithub.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_issue.*
@@ -19,7 +17,7 @@ class IssueActivity : AppCompatActivity() {
     @ExperimentalCoroutinesApi
     private val iViewModel: IssueViewModel by viewModels()
 
-    private lateinit var mAdapter: IssueItemAdapter
+    private var mAdapter = IssueItemAdapter()
 
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,9 +27,16 @@ class IssueActivity : AppCompatActivity() {
         val user = intent.extras?.getString("user")
         val repo = intent.extras?.getString("repo")
 
+        val fullName = intent.extras?.getString("fullName")
+
+        val repoUrl = intent.extras?.getString("repoUrl")
+
         if (repo != null) {
             if (user != null) {
-                iViewModel.getIssues(user, repo)
+                if (repoUrl != null) {
+                    initIssues(user, repo, repoUrl)
+                }
+                println("++++++++++++____________${user} -- ${repo}______________________=")
             }
         }
 
@@ -43,25 +48,23 @@ class IssueActivity : AppCompatActivity() {
 
     }
 
+
+
     @ExperimentalCoroutinesApi
-    private fun initRepos(user: String, repo: String) {
-        iViewModel.getIssues(user, repo)
-        iViewModel.reposLiveData.observe(this, Observer { state ->
-            when (state) {
-                is State.Loading -> showLoading(true)
-                is State.Success -> {
-                    if (state.data.isNotEmpty()) {
-                        mAdapter.submitList(state.data.toMutableList())
-                        showLoading(false)
-                    }
-                }
-                is State.Error -> {
-                    showToast(state.message)
-                    showLoading(false)
-                }
+    private fun initIssues(user: String, repo: String, repoUrl: String) {
+        iViewModel.getIssues(user, repo, repoUrl)
+        iViewModel.issuesLiveData.observe(this, Observer {listResource ->
+            // we don't need any null checks here for the adapter since LiveData guarantees that
+            // it won't call us if fragment is stopped or not started.
+            if (listResource?.data != null) {
+                mAdapter.submitList(listResource.data)
+            } else {
+                mAdapter.submitList(emptyList())
             }
         })
     }
+
+
 
     private fun showLoading(isLoading: Boolean) {
     }

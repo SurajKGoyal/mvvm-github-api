@@ -1,19 +1,17 @@
 package com.surajkgoyal.ltgithub.ui.repo
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
+
 import com.surajkgoyal.ltgithub.R
 import com.surajkgoyal.ltgithub.db.model.Repos
 import com.surajkgoyal.ltgithub.ui.issue.IssueActivity
 import com.surajkgoyal.ltgithub.utils.NetworkUtils
-import com.surajkgoyal.ltgithub.utils.State
+
 import com.surajkgoyal.ltgithub.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_repo.*
@@ -50,26 +48,18 @@ class RepoActivity : AppCompatActivity(), RepoItemAdapter.OnItemClickListener {
 
     @ExperimentalCoroutinesApi
     private fun initRepos(user: String) {
-        rViewModel.getPosts(user)
-        rViewModel.reposLiveData.observe(this, Observer { state ->
-            when (state) {
-                is State.Loading -> showLoading(true)
-                is State.Success -> {
-                    if (state.data.isNotEmpty()) {
-                        mAdapter.submitList(state.data.toMutableList())
-                        showLoading(false)
-                    }
-                }
-                is State.Error -> {
-                    showToast(state.message)
-                    showLoading(false)
-                }
+        rViewModel.getRepos(user)
+        rViewModel.reposLiveData.observe(this, Observer {listResource ->
+            // we don't need any null checks here for the adapter since LiveData guarantees that
+            // it won't call us if fragment is stopped or not started.
+            if (listResource?.data != null) {
+                mAdapter.submitList(listResource.data)
+
+            } else {
+                mAdapter.submitList(emptyList())
+
             }
         })
-
-        if(rViewModel.reposLiveData.value !is State.Success){
-            rViewModel.getPosts(user)
-        }
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -87,6 +77,9 @@ class RepoActivity : AppCompatActivity(), RepoItemAdapter.OnItemClickListener {
     override fun onItemClicked(repos: Repos) {
         val intent = Intent(this, IssueActivity::class.java)
         intent.putExtra("repo", repos.name)
-        intent.putExtra("user", repos.owner)
+        intent.putExtra("user",userName.text.toString() )
+        intent.putExtra("repoUrl", repos.url)
+        intent.putExtra("fullName", repos.fullName)
+        startActivity(intent)
     }
 }

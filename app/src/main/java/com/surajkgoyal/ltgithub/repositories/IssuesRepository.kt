@@ -1,14 +1,20 @@
 package com.surajkgoyal.ltgithub.repositories
 
+import androidx.lifecycle.LiveData
+import com.surajkgoyal.ltgithub.AppExecutors
 import com.surajkgoyal.ltgithub.api.GithubService
 import com.surajkgoyal.ltgithub.db.dao.IssuesDao
 import com.surajkgoyal.ltgithub.db.model.Issues
+import com.surajkgoyal.ltgithub.db.model.Repos
+import com.surajkgoyal.ltgithub.utils.RateLimiter
+import com.surajkgoyal.ltgithub.utils.Resource
 import com.surajkgoyal.ltgithub.utils.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import retrofit2.Response
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,23 +22,29 @@ import javax.inject.Singleton
 @Singleton
 class IssuesRepository @Inject constructor(
     val issuesDao: IssuesDao,
-    val githubService: GithubService
+    val githubService: GithubService,
+    val appExecutors: AppExecutors
 ) {
 
     /**
      * Fetched the repos from network and stored it in database. At the end, data from persistence
      * storage is fetched and emitted.
      */
-    fun getAllIssues(repo: String, user:String): Flow<State<List<Issues>>> {
-        return object : NetworkBoundRepository<List<Issues>, List<Issues>>() {
+    private val repoListRateLimit = RateLimiter<String>(10, TimeUnit.MINUTES)
 
-            override suspend fun saveRemoteData(response: List<Issues>) =
+    fun getAllIssues(repo: String, user:String, repoUrl:String): LiveData<Resource<List<Issues>>> {
+        return object : NetworkBoundResource<List<Issues>, List<Issues>>(appExecutors) {
+
+            override fun saveCallResult(response: List<Issues>) =
                 issuesDao.insertIssues(response)
 
-            override fun fetchFromLocal(): Flow<List<Issues>> = issuesDao.getAllIssues(repo)
+            override fun loadFromDb() = issuesDao.loadIssues(repoUrl)
 
-            override suspend fun fetchFromRemote(): Response<List<Issues>> = githubService.getIssues(user, repo)
+            override  fun createCall() = githubService.getIssues(user, repo)
+            override fun shouldFetch(data: List<Issues>?): Boolean {
+                return true
+            }
 
-        }.asFlow().flowOn(Dispatchers.IO)
+        }.asLiveData()
     }
 }
