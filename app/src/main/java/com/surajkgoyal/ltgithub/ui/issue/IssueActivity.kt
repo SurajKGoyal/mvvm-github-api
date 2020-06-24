@@ -17,7 +17,7 @@ class IssueActivity : AppCompatActivity() {
     @ExperimentalCoroutinesApi
     private val iViewModel: IssueViewModel by viewModels()
 
-    private var mAdapter = IssueItemAdapter()
+    private val mAdapter: IssueItemAdapter by lazy { IssueItemAdapter() }
 
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +26,6 @@ class IssueActivity : AppCompatActivity() {
 
         val user = intent.extras?.getString("user")
         val repo = intent.extras?.getString("repo")
-
-        val fullName = intent.extras?.getString("fullName")
 
         val repoUrl = intent.extras?.getString("repoUrl")
 
@@ -40,9 +38,7 @@ class IssueActivity : AppCompatActivity() {
             }
         }
 
-        issue_list.apply {
-            adapter = mAdapter
-        }
+        issue_list.adapter = mAdapter
 
 
 

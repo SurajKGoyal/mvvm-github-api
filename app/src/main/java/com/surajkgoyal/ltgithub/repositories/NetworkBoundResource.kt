@@ -59,6 +59,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             result.removeSource(dbSource)
             when (response) {
                 is ApiSuccessResponse -> {
+                    println("+++++++++________________________success_____________________")
                     appExecutors.diskIO().execute {
                         saveCallResult(processResponse(response))
                         appExecutors.mainThread().execute {
@@ -72,6 +73,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                     }
                 }
                 is ApiEmptyResponse -> {
+                    println("+++++++++________________________empty_____________________")
                     appExecutors.mainThread().execute {
                         // reload from disk whatever we had
                         result.addSource(loadFromDb()) { newData ->

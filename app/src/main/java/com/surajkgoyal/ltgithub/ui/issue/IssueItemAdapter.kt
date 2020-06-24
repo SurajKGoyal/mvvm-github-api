@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.surajkgoyal.ltgithub.db.model.Issues
 import com.surajkgoyal.ltgithub.db.model.Repos
 
-class IssueItemAdapter() :
+class IssueItemAdapter :
     ListAdapter<Issues, IssueItemViewHolder>(RepoListDiffCallback()) {
 
 

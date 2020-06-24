@@ -32,7 +32,7 @@ class IssuesRepository @Inject constructor(
      */
     private val repoListRateLimit = RateLimiter<String>(10, TimeUnit.MINUTES)
 
-    fun getAllIssues(repo: String, user:String, repoUrl:String): LiveData<Resource<List<Issues>>> {
+    fun getAllIssues(user: String, repo:String, repoUrl:String): LiveData<Resource<List<Issues>>> {
         return object : NetworkBoundResource<List<Issues>, List<Issues>>(appExecutors) {
 
             override fun saveCallResult(response: List<Issues>) =

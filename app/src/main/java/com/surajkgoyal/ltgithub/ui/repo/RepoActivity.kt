@@ -77,7 +77,7 @@ class RepoActivity : AppCompatActivity(), RepoItemAdapter.OnItemClickListener {
     override fun onItemClicked(repos: Repos) {
         val intent = Intent(this, IssueActivity::class.java)
         intent.putExtra("repo", repos.name)
-        intent.putExtra("user",userName.text.toString() )
+        intent.putExtra("user",userName.text.toString().trim() )
         intent.putExtra("repoUrl", repos.url)
         intent.putExtra("fullName", repos.fullName)
         startActivity(intent)

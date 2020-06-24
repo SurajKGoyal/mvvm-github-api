@@ -9,10 +9,10 @@ import retrofit2.http.Path
 
 interface GithubService {
 
-    @GET("/users/{login}/repos")
-    fun getRepos(@Path("login") login: String): LiveData<ApiResponse<List<Repos>>>
+    @GET("users/{login}/repos")
+    fun getRepos(@Path("login") login: String ): LiveData<ApiResponse<List<Repos>>>
 
-    @GET("/repos/{login}/{repo}/issues")
+    @GET("repos/{login}/{repo}/issues")
     fun getIssues(
         @Path("login") login: String,
         @Path("repo") repo: String
